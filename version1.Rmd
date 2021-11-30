@@ -1,0 +1,69 @@
+---
+geometry: "left=1cm, right=1cm,top=1cm,bottom=1cm"
+classoption: 
+  - landscape
+  - twocolumn
+output: 
+  pdf_document: 
+    highlight: zenburn
+---
+
+```{r, message=FALSE, warning=FALSE}
+#bibliotecas necessárias
+library(magrittr)
+library(tidyr)
+library(dplyr)
+library(purrr)
+```
+
+**Problemática:** aplicar uma análise (matriz de correlação) para as variáveis quantitativas (`r names(iris)[1:4]`), levando em consideração grupos (`r names(iris)[5]`)
+
+# Roteiro:
+
+**1. O conjunto de dados utilizado foi o** `iris` **;**
+
+```{r}
+iris %>% 
+  head(3)
+```
+
+**2. Em seguida, agrupou-se os dados utilizando a informação qualitativa desejada;**
+
+```{r}
+iris %>% 
+  dplyr::group_by(Species)
+```
+
+**3. Aplicou uma estrutura de aninhamento para estes grupos gerados;**
+
+```{r}
+iris %>%
+  dplyr::group_by(Species) %>%
+  tidyr::nest()
+```
+
+**4. E por fim, foi aplicada a análise das variáveis, separadamente para grupo;**
+
+```{r}
+iris %>% 
+  dplyr::group_by(Species) %>%
+  tidyr::nest() %>% 
+  dplyr::mutate(matrix_corr = purrr::map(.x = data, 
+                                         .f = ~ cor(.x))) 
+```
+
+\newpage
+
+# Resultado final
+
+```{r}
+corr_species <-
+  iris %>% #conjunto de dados
+  dplyr::group_by(Species) %>% #agrupar por informação qualitativa
+  tidyr::nest() %>% #aninhar os dados por coluna qualitativa 
+  dplyr::mutate(matrix_corr = purrr::map(.x = data, .f = ~ cor(.x)))
+  #aplicando para cada grupo, a matriz de correlação
+
+corr_species$matrix_corr
+```
+
