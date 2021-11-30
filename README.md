@@ -12,6 +12,8 @@ A biblioteca possui um [mapa de consulta das funções](https://github.com/rstud
 
 # Funções
 
+Todas as subseções abaixo serão utilizadas para registro dos estudos em relação a cada função da biblioteca. Para cada estudo de caso, foi gerado um arquivo .Rmd e .pdf com a finalidade de salvar as implementações realizadas. Cara relatório foi gerado da forma mais simples possível, de tal maneira que não haja necessidade de uma alto conhecimento prévio.
+
 ## purrr::map
 
 Casos de estudo:
